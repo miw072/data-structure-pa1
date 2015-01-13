@@ -1,3 +1,7 @@
+/**
+ *Author: Mingxuan Wang
+ *PID: A53077257
+ */
 #ifndef BSTNODE_HPP
 #define BSTNODE_HPP
 #include <iostream>
@@ -27,7 +31,28 @@ public:
    ** or 0 if there is none.
    */ // TODO
   BSTNode<Data>* successor() {
-
+    if (right != NULL){
+      BSTNode<Data>* leftmost = right;
+      while(leftmost->left != NULL){
+        leftmost = leftmost->left;
+      } 
+      return leftmost;
+    }else{
+      if (parent == NULL){
+        return NULL;
+      }else if (this == parent->left){
+        return parent;
+      }else{
+        BSTNode<Data>* trackerParent = parent->parent;
+        BSTNode<Data>* tracker = parent;
+        
+        while (trackerParent != NULL && tracker == trackerParent->right){
+          tracker = trackerParent;
+          trackerParent = trackerParent->parent;
+        }
+        return trackerParent;
+      }
+    }
   }
 
 }; 

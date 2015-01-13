@@ -1,3 +1,7 @@
+/**
+ *Author: Mingxuan Wang
+ *PID: A53077257
+ */
 #ifndef BSTITERATOR_HPP
 #define BSTITERATOR_HPP
 #include "BSTNode.hpp"
@@ -17,7 +21,7 @@ public:
    *  in this BSTIterator.
    */ // TODO
   BSTIterator(BSTNode<Data>* curr) {
-
+    this->curr = curr;
   }
 
   /** Dereference operator. */
@@ -40,12 +44,12 @@ public:
 
   /** Equality test operator. */ // TODO
   bool operator==(BSTIterator<Data> const & other) const {
-
+    return (this->curr == other.curr);
   }
 
   /** Inequality test operator. */ // TODO
   bool operator!=(BSTIterator<Data> const & other) const {
-
+    return !(this->curr == other.curr);
   }
 
 };

@@ -1,3 +1,7 @@
+/**
+ *Author: Mingxuan Wang
+ *PID: A53077257
+ */
 #ifndef BST_HPP
 #define BST_HPP
 #include "BSTNode.hpp"
@@ -30,7 +34,9 @@ public:
       Delete every node in this BST.
    */ // TODO
   virtual ~BST() {
-
+    destruct(root);
+    root = NULL;
+    return;
   }
 
   /** Given a reference to a Data item, insert a copy of it in this BST.
@@ -41,9 +47,27 @@ public:
    *  Data items. (should not use >, <=, >=)
    */ // TODO
   virtual bool insert(const Data& item) {
+    BSTNode<Data>** current = &root;             //The pointer to the current node 
+    BSTNode<Data>* prev = NULL;                  //The cuurent node's previous node, a.k.a the parent node
 
+    /*Find the place to insert the new node, return false when the node was already in the BST*/
+    while ((*current) != NULL){
+      prev = *current;
+      if ((*current)->data == item){
+        return false;
+      }else if ((*current)->data > item){
+        current = &(*current)->left;
+      }else{
+        current = &(*current)->right;
+      }
+    }
+    
+    (*current) = new BSTNode<Data>(item);        //Create a new node with item in its data, insert into the BST
+    (*current)->parent = prev;                   //Assign the prev node to the new node's parent;
+     isize++;
+     
+     return true;
   }
-
 
   /** Find a Data item in the BST.
    *  Return an iterator pointing to the item, or pointing past
@@ -52,26 +76,50 @@ public:
    *  Data items. (should not use >, <=, >=)
    */ // TODO
   iterator find(const Data& item) const {
-
+    BSTNode<Data>* current = root;
+    
+    /*Traverse the BST to find the item*/
+    while(current != NULL && current->data != item){
+      if (current->data > item){
+        current = current->left;
+      }else{
+        current = current->right;
+      }
+    }
+    
+    return typename BST<Data>::iterator(current);  //Return an iterator pointing to the item
   }
 
   
   /** Return the number of items currently in the BST.
    */ // TODO
   unsigned int size() const {
-
+    return isize;
   }
 
   /** Return true if the BST is empty, else false.
    */ // TODO
   bool empty() const {
-
+    if (isize == 0){
+      return true;
+    }else{
+      return false;
+    }
   }
 
   /** Return an iterator pointing to the first item in the BST (not the root).
    */ // TODO
   iterator begin() const {
-
+    BSTNode<Data>* current = root;
+    
+    /*When root is not NULL, get to the left-most node of BST*/
+    if (current != NULL){
+      while (current->left != NULL){
+        current = current->left;
+      }
+    }
+    
+    return typename BST<Data>::iterator(current);   //Return an iterator pointing to the left-most item in the BST
   }
 
   /** Return an iterator pointing past the last item in the BST.
@@ -101,6 +149,12 @@ private:
       print current node data
       recursively traverse right sub-tree
     */
+    if (n == NULL){
+      return;
+    }
+    inorder(n->left);
+    std::cout << *n << std::endl;
+    inorder(n->right);
   }
 
   /** Find the first element of the BST
@@ -120,8 +174,25 @@ private:
       recursively delete right sub-tree
       delete current node
     */
+    if (n == NULL){
+      return;
+    }
+    deleteAll(n->left);
+    deleteAll(n->right);
+    delete n;
   }
 
+  static void destruct(BSTNode<Data>* cRoot){
+    if (cRoot != NULL){
+      destruct(cRoot->left);
+      cRoot->left = NULL;
+      destruct(cRoot->right);
+      cRoot->right = NULL;
+      cRoot->parent = NULL;
+      delete(cRoot);
+    }
+    return;
+  }
 
  };
 

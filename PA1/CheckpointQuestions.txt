@@ -1,0 +1,24 @@
+a) Why do we use in-order traversal to print the BST nodes; while use post-order traversal to delete all BST nodes?
+Answer:  In-order traversal prints the BST nodes in the increasing order of the data stored in each node. This makes it easy for us to see if we traverse all nodes of the BST. 
+         Post-order is the order that follows: left, right and root for every subtree of BST. When we delete all nodes of a BST, we must first delete the child node (left and right) then we can delete root of subtree. If we delete root first, we lose connection with children and cannot find them anymore. Or if we use some data structure to keep the information of the children, it makes deletion more complicated. So an easy way to do deletion of all nodes is to use post-order traversal.
+
+b) Read the source code in BSTNode.hpp and BSTIterator.hpp. Then try to understand how to use operator overloading in C++, which is a feature that Java does not support.  To answer this question, pick an example from the source code and write down which operator is overloaded, what is the expression of this operator (i.e '+' has expression 'a+b') and give an example of using this overloaded operator.
+Answer:  For the source code in BSTIterator.hpp as below:
+         /** Pre-increment operator. */
+         BSTIterator<Data>& operator++() {
+             curr = curr->successor();
+             return *this;
+         }
+         This function overloaded pre-increment operator. The expression of this operator is '++a'. The example of using this overloaded operator is :
+         vector<int>::iterator vit = v.begin();
+  	 vector<int>::iterator ven = v.end();
+         cout << "Performing BST insertion test .... " << endl;
+         for(; vit != ven; ++vit) {
+             // all these inserts are unique, so should return true
+             if(! b.insert(*vit) ) {
+             cout << "Incorrect return value when inserting " << *vit << endl;
+             return -1;
+             }
+         }
+         In this part of code, we use ++vit to increment the iterator vit to next node in a BST(in-order).
+
